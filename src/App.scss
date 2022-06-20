@@ -1,0 +1,29 @@
+@import "styles/index.scss";
+
+html {
+  background: whitesmoke;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,h2,h3,h4,p{
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+.app{
+  &__wrapper{
+    display: flex;
+  }
+}

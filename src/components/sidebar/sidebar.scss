@@ -1,0 +1,94 @@
+@import "../../styles/index.scss";
+
+.sidebar {
+    border-radius: 1rem;
+    box-shadow: 0 1.6rem 3rem rgb(0, 0, 0, 0.1);
+    margin: 10px;
+    overflow: hidden;
+    height: calc(100vh - 25px);
+    background-color: #05050b;
+    border-right: 0 solid #05050b;
+    bottom: 0;
+    color: #fff;
+    flex-shrink: 0;
+
+    &__content {
+        text-decoration: none;
+        a {
+            text-decoration: none;
+        }
+    }
+
+    &--close {
+        width: 60px;
+    }
+
+    &--active {
+        width: 160px;
+    }
+
+    &__item {
+        height: 48.75px;
+        padding: 4.87px 9.75px;
+        position: relative;
+    }
+
+    &__itemWrapper {
+        color: #e7eef8;
+        display: flex;
+        font-size: 10.37px;
+        font-weight: 500;
+        padding: 9.75px;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            background-color: #19191f;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #f9dfdf;
+        }
+    }
+
+    &__icon {
+        font-size: 19px;
+        margin-right: 13px;
+    }
+
+    &__text {
+        position: relative;
+        top: 4px;
+        .sidebar--close & {
+            display: none;
+        }
+    }
+
+    &__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        .sidebar--close & {
+            left: 6px;
+            transform: rotate(180deg);
+        }
+    }
+
+    &__logoWrapper {
+        height: 65px;
+        padding: 12.87px 10px 0 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__logo {
+        color: #fff;
+    }
+
+    &__arrow {
+        fill: #fff;
+        font-size: 30px;
+        position: relative;
+        top: -10px;
+    }
+}
