@@ -109,15 +109,16 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </span>
           </div>
         </NavLink>
-
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-              <FaHospitalUser />
+        <NavLink to="/unit">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaHospitalUser />
+              </span>
+              <span className="sidebar__text">Unit</span>
             </span>
-            <span className="sidebar__text">Dashboard Booking</span>
-          </span>
-        </div>
+          </div>
+        </NavLink>
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">

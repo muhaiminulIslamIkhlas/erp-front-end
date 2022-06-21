@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Dashboard from "./pages/dashboard/dashboard";
 import Login from "./pages/login/login";
+import Unit from "./pages/product/unit/unit";
 
 const App: React.FC = () => {
   const token =
@@ -26,6 +27,14 @@ const App: React.FC = () => {
             <Dashboard>
               <h1>Hello World</h1>
             </Dashboard>
+          }
+        ></Route>
+        <Route
+          path="/unit"
+          element={
+            <Unit>
+              <h1>Hello World</h1>
+            </Unit>
           }
         ></Route>
       </Routes>

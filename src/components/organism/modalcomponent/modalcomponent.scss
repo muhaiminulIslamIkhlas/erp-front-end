@@ -1,0 +1,105 @@
+@import "../../../styles/index.scss";
+.o-modal {
+    $root: &;
+  
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $z-index-modal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    opacity: 1;
+    transition: opacity $micro-animation-duration ease-out;
+  
+    &__heading {
+      font-size: 18px;
+      font-weight: $font-bold;
+      color: $color-primary02;
+      @include sp() {
+        font-size: 16px;
+      }
+    }
+  
+    &__title {
+      font-size: 14px;
+      font-weight: $font-bold;
+    }
+  
+    &--closed {
+      pointer-events: none;
+      opacity: 0;
+    }
+  
+    &__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: $z-index-layer-bg;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(0 0 0 / 15%);
+    }
+  
+    &__content {
+      position: relative;
+      z-index: $z-index-layer1;
+      max-width: 100%;
+      max-height: 100vh;
+      overflow-y: auto;
+      background-color: $color-secondary05;
+      border-radius: 16px;
+      box-shadow: 0 16px 32px $color-shadow;
+      @include pc() {
+        left: 50%;
+        width: 640px;
+        padding: $padding-32 $padding-40;
+        transform: translateX(-50%);
+      }
+      @include sp() {
+        padding: $padding-32 $padding-24;
+      }
+  
+      scrollbar-width: thin;
+  
+      &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+  
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba($color-secondary01, 0.1);
+        border-radius: 4px;
+      }
+    }
+  
+    &__freeContent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: $z-index-layer0;
+      width: 100%;
+      height: 100%;
+    }
+  
+    &__buttonWrap {
+      display: flex;
+      justify-content: center;
+    }
+  
+    &__button {
+      + #{$root}__button {
+        margin-left: $margin-16;
+      }
+    }
+  
+    &--free {
+      #{$root}__content {
+        @include pc {
+          width: auto;
+        }
+      }
+    }
+  }
