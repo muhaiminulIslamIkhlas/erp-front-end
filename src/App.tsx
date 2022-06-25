@@ -32,9 +32,7 @@ const App: React.FC = () => {
         <Route
           path="/unit"
           element={
-            <Unit>
-              <h1>Hello World</h1>
-            </Unit>
+            <Unit />
           }
         ></Route>
       </Routes>

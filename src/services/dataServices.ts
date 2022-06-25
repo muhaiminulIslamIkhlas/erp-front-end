@@ -1,6 +1,7 @@
 import apiUrl from "../config.json";
 import Notiflix, { Loading, Notify } from "notiflix";
 import http from "./httpServices";
+import { string } from "joi";
 
 export async function store(formData: any, url: string) {
   const apiEndpoint = apiUrl.apiUrl;
@@ -36,6 +37,22 @@ export async function get(url: string) {
     return data;
   } catch (error) {
     let message = "Something went wrong, please try again";
+    Loading.remove();
+    Notiflix.Report.failure("Error!!!", message, "Okay");
+  }
+}
+
+export async function deleteData(url: string, id: any) {
+  const apiEndpoint = apiUrl.apiUrl;
+  try {
+    Loading.pulse();
+    let { data } = await http.get(apiEndpoint + url + "/" + id);
+    Loading.remove();
+    Notify.success(data.data.message);
+  } catch (error) {
+    console.log(error);
+    let message = "Something went wrong, please try again";
+    Loading.remove();
     Notiflix.Report.failure("Error!!!", message, "Okay");
   }
 }
