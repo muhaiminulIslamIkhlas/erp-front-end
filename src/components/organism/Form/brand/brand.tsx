@@ -5,20 +5,21 @@ import Joi from "joi";
 import Button from "../../../atom/button/button";
 import { store } from "../../../../services/dataServices";
 import Container from "../../../atom/container/container";
-import "./unit.scss";
+import "./brand.scss";
 
-interface UnitProps {
+interface BrandProps {
   isSuuccess: () => void;
   formData: any;
   buttonText: string;
 }
 
-const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
+const Brand: React.FC<BrandProps> = ({ isSuuccess, formData, buttonText }) => {
   const [data, setData] = useState<any>(formData);
 
   const [errors, setErrors] = useState<any>({});
   const rules: any = {
-    unit_name: Joi.string().min(2).max(30).required().label("Unit"),
+    brand_name: Joi.string().min(3).max(30).required().label("Unit"),
+    description: Joi.string().min(3).max(100).required().label("Unit"),
     id: Joi.optional(),
     created_at: Joi.optional(),
     updated_at: Joi.optional(),
@@ -34,10 +35,11 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
       return;
     }
 
-    let response = await store(data, "store-unit");
+    let response = await store(data, "create-brand");
     if (response) {
       setData({
-        unit_name: "",
+        brand_name: "",
+        description: "",
       });
       isSuuccess();
     }
@@ -59,13 +61,24 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
         <Container margin="12">
           <Input
             label={false}
-            value={data.unit_name}
+            value={data.brand_name}
             onChange={handleChange}
-            name="unit_name"
+            name="brand_name"
             type="text"
-            error={errors.unit_name}
-            placeHolder="unit"
+            error={errors.brand_name}
+            placeHolder="Brand Name"
           />
+          <Container margin="8">
+            <Input
+              label={false}
+              value={data.description}
+              onChange={handleChange}
+              name="description"
+              type="text"
+              error={errors.description}
+              placeHolder="Brand description"
+            />
+          </Container>
         </Container>
         <Container margin="12">
           <Button label={buttonText} disabled={false} />
@@ -75,4 +88,4 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
   );
 };
 
-export default Unit;
+export default Brand;

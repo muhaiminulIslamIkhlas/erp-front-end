@@ -21,6 +21,7 @@ const Unit: React.FC = () => {
           },
         ]}
         type="unit"
+        pageHeading="All Unit"
       />
     </Admin>
   );

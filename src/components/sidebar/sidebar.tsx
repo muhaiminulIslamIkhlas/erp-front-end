@@ -119,46 +119,66 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </span>
           </div>
         </NavLink>
+        <NavLink to="/account">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaHospitalUser />
+              </span>
+              <span className="sidebar__text">Account</span>
+            </span>
+          </div>
+        </NavLink>
+        <NavLink to="/brand">
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">
               <FaLayerGroup />
             </span>
-            <span className="sidebar__text">CRM Dashboard</span>
+            <span className="sidebar__text">Brand</span>
           </span>
         </div>
+        </NavLink>
+        <NavLink to="/category">
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">
               <MdRedeem />
             </span>
-            <span className="sidebar__text">Summery</span>
+            <span className="sidebar__text">Category</span>
           </span>
         </div>
+        </NavLink>
+        <NavLink to="/supplier">
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">
-              <SiBbciplayer />
+            <AiOutlineUsergroupDelete />
             </span>
-            <span className="sidebar__text">List Page</span>
+            <span className="sidebar__text">Supplier</span>
           </span>
         </div>
+        </NavLink>
+        <NavLink to="/customer">
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">
               <AiOutlineUsergroupDelete />
             </span>
-            <span className="sidebar__text">User</span>
+            <span className="sidebar__text">Customer</span>
           </span>
         </div>
+        </NavLink>
+        <NavLink to="/product/item/list">
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">
               <MdRedeem />
             </span>
-            <span className="sidebar__text">Sales</span>
+            <span className="sidebar__text">Product</span>
           </span>
         </div>
+        </NavLink>
         <div className="sidebar__item">
           <span className="sidebar__itemWrapper">
             <span className="sidebar__icon">

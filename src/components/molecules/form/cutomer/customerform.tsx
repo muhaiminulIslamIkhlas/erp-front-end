@@ -5,24 +5,36 @@ import Joi from "joi";
 import Button from "../../../atom/button/button";
 import { store } from "../../../../services/dataServices";
 import Container from "../../../atom/container/container";
-import "./unit.scss";
+import "./customerform.scss";
 
-interface UnitProps {
+interface CustomerFormProps {
   isSuuccess: () => void;
   formData: any;
   buttonText: string;
 }
 
-const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
+const CustomerForm: React.FC<CustomerFormProps> = ({
+  isSuuccess,
+  formData,
+  buttonText,
+}) => {
   const [data, setData] = useState<any>(formData);
-
   const [errors, setErrors] = useState<any>({});
+  const createUrl = "store-customer";
+  const formObj = {
+    customer_name: "",
+    customer_phone: "",
+    customer_address: "",
+  };
   const rules: any = {
-    unit_name: Joi.string().min(2).max(30).required().label("Unit"),
+    customer_name: Joi.string()
+      .min(3)
+      .max(30)
+      .required()
+      .label("Supplier Name"),
+    customer_address: Joi.string().min(3).max(100).required().label("Address"),
+    customer_phone: Joi.number().min(3).required().label("Phone"),
     id: Joi.optional(),
-    created_at: Joi.optional(),
-    updated_at: Joi.optional(),
-    store_id: Joi.optional(),
   };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -34,11 +46,9 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
       return;
     }
 
-    let response = await store(data, "store-unit");
+    let response = await store(data, createUrl);
     if (response) {
-      setData({
-        unit_name: "",
-      });
+      setData(formObj);
       isSuuccess();
     }
   };
@@ -59,13 +69,35 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
         <Container margin="12">
           <Input
             label={false}
-            value={data.unit_name}
+            value={data.customer_name}
             onChange={handleChange}
-            name="unit_name"
+            name="customer_name"
             type="text"
-            error={errors.unit_name}
-            placeHolder="unit"
+            error={errors.customer_name}
+            placeHolder="Customer Name"
           />
+          <Container margin="8">
+            <Input
+              label={false}
+              value={data.customer_phone}
+              onChange={handleChange}
+              name="customer_phone"
+              type="number"
+              error={errors.customer_phone}
+              placeHolder="Phone"
+            />
+          </Container>
+          <Container margin="8">
+            <Input
+              label={false}
+              value={data.customer_address}
+              onChange={handleChange}
+              name="customer_address"
+              type="text"
+              error={errors.customer_address}
+              placeHolder="Address"
+            />
+          </Container>
         </Container>
         <Container margin="12">
           <Button label={buttonText} disabled={false} />
@@ -75,4 +107,4 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
   );
 };
 
-export default Unit;
+export default CustomerForm;

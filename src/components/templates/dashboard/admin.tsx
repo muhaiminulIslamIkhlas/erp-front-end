@@ -14,7 +14,7 @@ const Admin: React.FC<AdminProps> = ({ children }) => {
   useEffect(()=>{
     const token = getJwt();
     if(!token){
-      navigate('login');
+      // navigate('login');
     }
   })
   return (

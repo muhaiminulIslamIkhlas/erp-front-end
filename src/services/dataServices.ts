@@ -1,7 +1,6 @@
 import apiUrl from "../config.json";
 import Notiflix, { Loading, Notify } from "notiflix";
 import http from "./httpServices";
-import { string } from "joi";
 
 export async function store(formData: any, url: string) {
   const apiEndpoint = apiUrl.apiUrl;
@@ -28,16 +27,24 @@ export async function store(formData: any, url: string) {
   }
 }
 
-export async function get(url: string) {
+export async function get(url: string, loader = true) {
   const apiEndpoint = apiUrl.apiUrl;
   try {
-    Loading.pulse();
+    if (loader) {
+      Loading.pulse();
+    }
+
     let { data } = await http.get(apiEndpoint + url);
-    Loading.remove();
+    if (loader) {
+      Loading.remove();
+    }
+
     return data;
   } catch (error) {
     let message = "Something went wrong, please try again";
-    Loading.remove();
+    if (loader) {
+      Loading.remove();
+    }
     Notiflix.Report.failure("Error!!!", message, "Okay");
   }
 }

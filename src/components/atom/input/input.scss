@@ -1,4 +1,4 @@
-@import '../../../styles/index.scss';
+@import "../../../styles/index.scss";
 
 .a-input {
     padding: 10px;
@@ -16,5 +16,11 @@
         font-size: 12px;
         margin-top: 4px;
         color: coral;
+    }
+
+    &__label {
+        font-size: 15px;
+        font-weight: bold;
+        color: darkblue;
     }
 }

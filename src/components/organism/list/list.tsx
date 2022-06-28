@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../../components/atom/button/button";
 import UnitForm from "../../../components/organism/Form/unit/unit";
+import BrandForm from "../../../components/organism/Form/brand/brand";
+import CategoryForm from "../../../components/organism/Form/category/category";
+import AccountForm from "../../../components/organism/Form/account/account";
+import SupplierForm from "../../../components/organism/Form/supplier/supplier";
 import ModalComponent from "../../../components/organism/modalcomponent/modalcomponent";
 import { deleteData, get } from "../../../services/dataServices";
 import { Pagination, Space, Table, Tag } from "antd";
@@ -8,6 +12,8 @@ import type { ColumnsType } from "antd/lib/table";
 import Container from "../../../components/atom/container/container";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import "./list.scss";
+import Input from "../../atom/input/input";
+import CustomerForm from "../../molecules/form/cutomer/customerform";
 
 interface DataType {
   key: string;
@@ -23,7 +29,8 @@ interface UnitProps {
   deleteUrl: string;
   buttontext: string;
   modalTitle: string;
-  type: "unit";
+  type: "unit" | "account" | "brand" | "category" | "supplier" | "customer";
+  pageHeading: string;
 }
 
 const List: React.FC<UnitProps> = ({
@@ -34,6 +41,7 @@ const List: React.FC<UnitProps> = ({
   deleteUrl,
   modalTitle,
   type,
+  pageHeading,
 }) => {
   const [data, setData] = useState<any>([]);
   const [total, setTotal] = useState<any>(0);
@@ -41,6 +49,7 @@ const List: React.FC<UnitProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>(formObject);
   const [buttonText, setButtonText] = useState<string>("Create");
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const fetchData = async (page?: number, pageSize = 10) => {
     let fetchedData: any;
@@ -82,6 +91,11 @@ const List: React.FC<UnitProps> = ({
     fetchData();
   };
 
+  const handleSearch = (e: any) => {
+    console.log(e.target.value);
+    setSearchValue(e.target.value);
+  };
+
   useEffect(() => {
     fetchData();
   }, ["data"]);
@@ -108,7 +122,7 @@ const List: React.FC<UnitProps> = ({
     },
   ];
   return (
-    <>
+    <div className="o-list">
       <ModalComponent
         isOpen={isOpen}
         closeModal={closeModal}
@@ -121,31 +135,82 @@ const List: React.FC<UnitProps> = ({
             buttonText={buttonText}
           />
         )}
-      </ModalComponent>
-      <></>
-      <Button
-        label={buttontext}
-        onClick={handleCreateNew}
-        disabled={false}
-      ></Button>
-      <div>
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          size="small"
-        />
-        <Container margin="8">
-          <Pagination
-            defaultCurrent={6}
-            onChange={fetchData}
-            total={total}
-            size="small"
-            current={current}
+        {type === "account" && (
+          <AccountForm
+            isSuuccess={submitSuccess}
+            formData={formData}
+            buttonText={buttonText}
           />
-        </Container>
+        )}
+        {type === "brand" && (
+          <BrandForm
+            isSuuccess={submitSuccess}
+            formData={formData}
+            buttonText={buttonText}
+          />
+        )}
+        {type === "category" && (
+          <CategoryForm
+            isSuuccess={submitSuccess}
+            formData={formData}
+            buttonText={buttonText}
+          />
+        )}
+        {type === "supplier" && (
+          <SupplierForm
+            isSuuccess={submitSuccess}
+            formData={formData}
+            buttonText={buttonText}
+          />
+        )}
+        {type === "customer" && (
+          <CustomerForm
+            isSuuccess={submitSuccess}
+            formData={formData}
+            buttonText={buttonText}
+          />
+        )}
+      </ModalComponent>
+      <div className="o-list__heading">
+        <h2>{pageHeading}</h2>
       </div>
-    </>
+      <Container margin="12">
+        <div className="o-list__topBar">
+          <Input
+            label={false}
+            placeHolder="Search"
+            name="search"
+            type="text"
+            onChange={handleSearch}
+            value={searchValue}
+          />
+          <Button
+            label={buttontext}
+            onClick={handleCreateNew}
+            disabled={false}
+          ></Button>
+        </div>
+      </Container>
+      <Container margin="12">
+        <div className="o-list__table">
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={false}
+            size="small"
+          />
+          <Container margin="8">
+            <Pagination
+              defaultCurrent={6}
+              onChange={fetchData}
+              total={total}
+              size="small"
+              current={current}
+            />
+          </Container>
+        </div>
+      </Container>
+    </div>
   );
 };
 

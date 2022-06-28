@@ -1,9 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.scss";
+import Account from "./pages/account/account";
+import Customer from "./pages/customer/customer";
 import Dashboard from "./pages/dashboard/dashboard";
 import Login from "./pages/login/login";
+import Brand from "./pages/product/brand/brand";
+import ItemCreate from "./pages/product/item/create/create";
+import ItemList from "./pages/product/item/list/list";
+import Category from "./pages/product/category/category";
 import Unit from "./pages/product/unit/unit";
+import Supplier from "./pages/supplier/supplier";
 
 const App: React.FC = () => {
   const token =
@@ -33,6 +40,48 @@ const App: React.FC = () => {
           path="/unit"
           element={
             <Unit />
+          }
+        ></Route>
+        <Route
+          path="/account"
+          element={
+            <Account />
+          }
+        ></Route>
+        <Route
+          path="/brand"
+          element={
+            <Brand />
+          }
+        ></Route>
+        <Route
+          path="/category"
+          element={
+            <Category />
+          }
+        ></Route>
+        <Route
+          path="/supplier"
+          element={
+            <Supplier />
+          }
+        ></Route>
+        <Route
+          path="/customer"
+          element={
+            <Customer />
+          }
+        ></Route>
+        <Route
+          path="/product/item/create"
+          element={
+            <ItemCreate />
+          }
+        ></Route>
+        <Route
+          path="/product/item/list"
+          element={
+            <ItemList />
           }
         ></Route>
       </Routes>

@@ -5,24 +5,22 @@ import Joi from "joi";
 import Button from "../../../atom/button/button";
 import { store } from "../../../../services/dataServices";
 import Container from "../../../atom/container/container";
-import "./unit.scss";
+import "./category.scss";
 
-interface UnitProps {
+interface CategoryProps {
   isSuuccess: () => void;
   formData: any;
   buttonText: string;
 }
 
-const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
+const Category: React.FC<CategoryProps> = ({ isSuuccess, formData, buttonText }) => {
   const [data, setData] = useState<any>(formData);
 
   const [errors, setErrors] = useState<any>({});
   const rules: any = {
-    unit_name: Joi.string().min(2).max(30).required().label("Unit"),
+    category_name: Joi.string().min(3).max(30).required().label("Category"),
+    description: Joi.string().min(3).max(100).required().label("Description"),
     id: Joi.optional(),
-    created_at: Joi.optional(),
-    updated_at: Joi.optional(),
-    store_id: Joi.optional(),
   };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -34,10 +32,11 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
       return;
     }
 
-    let response = await store(data, "store-unit");
+    let response = await store(data, "create-category");
     if (response) {
       setData({
-        unit_name: "",
+        category_name: "",
+        description: "",
       });
       isSuuccess();
     }
@@ -59,13 +58,24 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
         <Container margin="12">
           <Input
             label={false}
-            value={data.unit_name}
+            value={data.category_name}
             onChange={handleChange}
-            name="unit_name"
+            name="category_name"
             type="text"
-            error={errors.unit_name}
-            placeHolder="unit"
+            error={errors.category_name}
+            placeHolder="Catgory Name"
           />
+          <Container margin="8">
+            <Input
+              label={false}
+              value={data.description}
+              onChange={handleChange}
+              name="description"
+              type="text"
+              error={errors.description}
+              placeHolder="Catgory description"
+            />
+          </Container>
         </Container>
         <Container margin="12">
           <Button label={buttonText} disabled={false} />
@@ -75,4 +85,4 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
   );
 };
 
-export default Unit;
+export default Category;

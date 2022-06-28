@@ -5,24 +5,23 @@ import Joi from "joi";
 import Button from "../../../atom/button/button";
 import { store } from "../../../../services/dataServices";
 import Container from "../../../atom/container/container";
-import "./unit.scss";
+import "./supplier.scss";
 
-interface UnitProps {
+interface SupplierProps {
   isSuuccess: () => void;
   formData: any;
   buttonText: string;
 }
 
-const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
+const Supplier: React.FC<SupplierProps> = ({ isSuuccess, formData, buttonText }) => {
   const [data, setData] = useState<any>(formData);
 
   const [errors, setErrors] = useState<any>({});
   const rules: any = {
-    unit_name: Joi.string().min(2).max(30).required().label("Unit"),
+    supplier_name: Joi.string().min(3).max(30).required().label("Supplier Name"),
+    supplier_address: Joi.string().min(3).max(100).required().label("Address"),
+    supplier_phone: Joi.number().min(3).required().label("Phone"),
     id: Joi.optional(),
-    created_at: Joi.optional(),
-    updated_at: Joi.optional(),
-    store_id: Joi.optional(),
   };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -34,10 +33,12 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
       return;
     }
 
-    let response = await store(data, "store-unit");
+    let response = await store(data, "create-supplier");
     if (response) {
       setData({
-        unit_name: "",
+        supplier_name: "",
+        supplier_phone: "",
+        supplier_address: "",
       });
       isSuuccess();
     }
@@ -59,13 +60,35 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
         <Container margin="12">
           <Input
             label={false}
-            value={data.unit_name}
+            value={data.supplier_name}
             onChange={handleChange}
-            name="unit_name"
+            name="supplier_name"
             type="text"
-            error={errors.unit_name}
-            placeHolder="unit"
+            error={errors.supplier_name}
+            placeHolder="Supplier Name"
           />
+          <Container margin="8">
+            <Input
+              label={false}
+              value={data.supplier_phone}
+              onChange={handleChange}
+              name="supplier_phone"
+              type="number"
+              error={errors.supplier_phone}
+              placeHolder="Phone"
+            />
+          </Container>
+          <Container margin="8">
+            <Input
+              label={false}
+              value={data.supplier_address}
+              onChange={handleChange}
+              name="supplier_address"
+              type="text"
+              error={errors.supplier_address}
+              placeHolder="Address"
+            />
+          </Container>
         </Container>
         <Container margin="12">
           <Button label={buttonText} disabled={false} />
@@ -75,4 +98,4 @@ const Unit: React.FC<UnitProps> = ({ isSuuccess, formData, buttonText }) => {
   );
 };
 
-export default Unit;
+export default Supplier;
