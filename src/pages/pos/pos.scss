@@ -1,0 +1,62 @@
+@import "../../styles/index.scss";
+
+.p-pos {
+    max-width: 1366px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+
+
+    &__productCard {
+        padding: 10px;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    &__name {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    &__cart {
+        max-width: 700px;
+    }
+
+    &__price {
+        font-size: 12px;
+        font-weight: bold;
+        color: brown;
+    }
+
+    &__qty{
+        margin-right: 7px;
+        margin-left: 8px;
+        font-weight: bold;
+    }
+
+    &__row {
+        display: flex;
+        flex-shrink: 0;
+        font-size: 13px;
+        background-color: #f6fdfe;
+        border-bottom: 1px dashed #ced4da;
+        padding: 8px 0;
+        &--title {
+            background: #fff;
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+    }
+
+    &__element {
+        width: 100px;
+        &--product {
+            width: 300px;
+        }
+    }
+}

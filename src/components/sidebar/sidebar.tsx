@@ -130,63 +130,75 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           </div>
         </NavLink>
         <NavLink to="/brand">
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-              <FaLayerGroup />
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaLayerGroup />
+              </span>
+              <span className="sidebar__text">Brand</span>
             </span>
-            <span className="sidebar__text">Brand</span>
-          </span>
-        </div>
+          </div>
         </NavLink>
         <NavLink to="/category">
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-              <MdRedeem />
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <MdRedeem />
+              </span>
+              <span className="sidebar__text">Category</span>
             </span>
-            <span className="sidebar__text">Category</span>
-          </span>
-        </div>
+          </div>
         </NavLink>
         <NavLink to="/supplier">
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-            <AiOutlineUsergroupDelete />
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <AiOutlineUsergroupDelete />
+              </span>
+              <span className="sidebar__text">Supplier</span>
             </span>
-            <span className="sidebar__text">Supplier</span>
-          </span>
-        </div>
+          </div>
         </NavLink>
         <NavLink to="/customer">
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-              <AiOutlineUsergroupDelete />
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <AiOutlineUsergroupDelete />
+              </span>
+              <span className="sidebar__text">Customer</span>
             </span>
-            <span className="sidebar__text">Customer</span>
-          </span>
-        </div>
+          </div>
         </NavLink>
         <NavLink to="/product/item/list">
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-              <MdRedeem />
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <MdRedeem />
+              </span>
+              <span className="sidebar__text">Product</span>
             </span>
-            <span className="sidebar__text">Product</span>
-          </span>
-        </div>
+          </div>
         </NavLink>
-        <div className="sidebar__item">
-          <span className="sidebar__itemWrapper">
-            <span className="sidebar__icon">
-              <FaLayerGroup />
+        <NavLink to="/product/item/purchase/list">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaLayerGroup />
+              </span>
+              <span className="sidebar__text">Purchase</span>
             </span>
-            <span className="sidebar__text">Blank</span>
-          </span>
-        </div>
+          </div>
+        </NavLink>
+        <NavLink to="/pos">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaLayerGroup />
+              </span>
+              <span className="sidebar__text">Pos</span>
+            </span>
+          </div>
+        </NavLink>
       </div>
     </div>
   );

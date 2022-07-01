@@ -1,6 +1,10 @@
 @import "../../../styles/index.scss";
 
 .a-container {
+    &--4 {
+        margin-top: 4px;
+    }
+
     &--8 {
         margin-top: 8px;
     }

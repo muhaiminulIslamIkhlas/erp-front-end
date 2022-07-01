@@ -1,0 +1,11 @@
+.m-purcaseForm{
+    &__item{
+        display: grid;
+        grid-template-columns: .1fr 5fr 3fr 3fr 3fr .1fr;
+        column-gap: 10px;
+        &__element{
+            // margin-right: 10px;
+            align-self: center;
+        }
+    }
+}

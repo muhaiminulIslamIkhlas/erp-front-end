@@ -3,7 +3,7 @@ import "./container.scss";
 
 interface ContainerProps {
   children: React.ReactNode;
-  margin?: "8" | "12" | "16" | "20" | "24";
+  margin?: "4" | "8" | "12" | "16" | "20" | "24";
 }
 
 const Container: React.FC<ContainerProps> = ({ children, margin }) => {

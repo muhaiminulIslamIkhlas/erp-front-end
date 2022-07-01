@@ -8,9 +8,13 @@ import Login from "./pages/login/login";
 import Brand from "./pages/product/brand/brand";
 import ItemCreate from "./pages/product/item/create/create";
 import ItemList from "./pages/product/item/list/list";
+import MakePurchase from "./pages/product/purchase/create/create";
+import PurchaseDetails from "./pages/product/purchase/details/details";
+import PurchaseList from "./pages/product/purchase/list/list";
 import Category from "./pages/product/category/category";
 import Unit from "./pages/product/unit/unit";
 import Supplier from "./pages/supplier/supplier";
+import Pos from "./pages/pos/pos";
 
 const App: React.FC = () => {
   const token =
@@ -82,6 +86,30 @@ const App: React.FC = () => {
           path="/product/item/list"
           element={
             <ItemList />
+          }
+        ></Route>
+        <Route
+          path="/product/item/purchase"
+          element={
+            <MakePurchase />
+          }
+        ></Route>
+        <Route
+          path="/product/item/purchase/list"
+          element={
+            <PurchaseList />
+          }
+        ></Route>
+        <Route
+          path="/product/item/purchase/details/:detailsId"
+          element={
+            <PurchaseDetails />
+          }
+        ></Route>
+        <Route
+          path="/pos"
+          element={
+            <Pos />
           }
         ></Route>
       </Routes>
