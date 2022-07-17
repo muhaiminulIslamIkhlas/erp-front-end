@@ -50,7 +50,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ isSuuccess, back }) => {
 
   const rules: any = {
     invoice_no: Joi.string().min(3).max(100).required().label("Invoice No"),
-    date: Joi.string().required().label("Brand"),
+    date: Joi.string().required().label("Date"),
     supplier_id: Joi.string().required().label("Supplier"),
     account_id: Joi.string().required().label("Account"),
     discount: Joi.number().optional(),

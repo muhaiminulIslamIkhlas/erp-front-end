@@ -31,7 +31,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       .min(3)
       .max(30)
       .required()
-      .label("Supplier Name"),
+      .label("Customer Name"),
     customer_address: Joi.string().min(3).max(100).required().label("Address"),
     customer_phone: Joi.number().min(3).required().label("Phone"),
     id: Joi.optional(),

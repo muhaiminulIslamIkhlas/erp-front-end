@@ -1,12 +1,12 @@
 @import "../../styles/index.scss";
 
 .p-pos {
+    padding: 20px;
     max-width: 1366px;
     margin: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 20px;
-
 
     &__productCard {
         padding: 10px;
@@ -16,6 +16,11 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s;
+        &:hover {
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        }
     }
 
     &__name {
@@ -33,7 +38,7 @@
         color: brown;
     }
 
-    &__qty{
+    &__qty {
         margin-right: 7px;
         margin-left: 8px;
         font-weight: bold;
@@ -58,5 +63,26 @@
         &--product {
             width: 300px;
         }
+    }
+
+    &__discount {
+        width: 75px;
+    }
+
+    &__calculation {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        &__label {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    }
+
+    &__customer{
+        display: grid;
+        grid-template-columns: 8fr 1fr;
+        column-gap: 20px;
     }
 }
