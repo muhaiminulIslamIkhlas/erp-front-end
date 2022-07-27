@@ -12,13 +12,12 @@ http.setJwt(getJwt());
 export async function login(username: string, password: string) {
   try {
     const { data } = await http.post(apiEndpoint + "login", {
-      username,
+      name:username,
       password,
     });
-    console.log(data);
     localStorage.setItem(tokenKey, data.access_token);
     axios.defaults.headers.common = {
-      Authorization: `bearer ${data.access_token}`,
+      Authorization: `Bearer ${data.access_token}`,
     };
   } catch (error: any) {
     let status = error.response.status;

@@ -8,7 +8,7 @@ import {
 import Joi from "joi";
 import Button from "../../atom/button/button";
 import authServices from "../../../services/authServices";
-import Logo from "../../../assets/images/bnbd.png";
+import Logo from "../../../assets/images/erp.png";
 import Container from "../../atom/container/container";
 import "./loginForm.scss";
 import { useNavigate } from "react-router-dom";

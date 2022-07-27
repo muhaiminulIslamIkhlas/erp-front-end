@@ -3,28 +3,40 @@ import "./pos.scss";
 import PosTemplate from "../../components/templates/pos/pos";
 import {
   DeleteOutlined,
+  DollarOutlined,
   MinusCircleOutlined,
+  MoneyCollectOutlined,
   PlusCircleOutlined,
   PlusOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import Container from "../../components/atom/container/container";
-import { Button, Card, Col, Row } from "antd";
-import { get } from "../../services/dataServices";
+import { Button, Card, Col, Row, Tag } from "antd";
+import { get, sell } from "../../services/dataServices";
 import ModalComponent from "../../components/organism/modalcomponent/modalcomponent";
 import Input from "../../components/atom/input/input";
 import ButtonCustom from "../../components/atom/button/button";
-import Notiflix from "notiflix";
+import Notiflix, { Report } from "notiflix";
 import Header from "../../components/atom/heading/header";
 import CustomerForm from "../../components/molecules/form/cutomer/customerform";
+import { useNavigate } from "react-router-dom";
 
 const Pos = () => {
   const date = new Date();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<any>([]);
   const [customer, setCustomer] = useState<any>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<any>("product");
+  const [paymentMethod, setPaymentMethod] = useState<any>([]);
+  const [stockedOutProduct, setStockedOutProduct] = useState<any>([]);
+  const [payment, setPayment] = useState<any>({
+    due: 0,
+    payment: 0,
+    paymentMethod: 0,
+    customer_id: "",
+  });
   const [finalCalculation, setFinalCalculation] = useState<any>({
     date: date.toISOString().slice(0, 10),
     items: 0,
@@ -200,7 +212,9 @@ const Pos = () => {
   };
 
   const handleCustomer = (e: any) => {
-    console.log(e.target.value);
+    let paymentClone = { ...payment };
+    paymentClone.customer_id = e.target.value;
+    setPayment(paymentClone);
   };
 
   const customerAddButton = () => {
@@ -213,10 +227,100 @@ const Pos = () => {
     setIsOpen(false);
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    if(!cart.length){
+      Report.warning(
+        'Warning',
+        'Please add some product first',
+        'Okay',
+        );
+        return
+    }
+    if(!payment.customer_id){
+      Report.warning(
+        'Warning',
+        'Please select a customer',
+        'Okay',
+        );
+        return
+    }
+    let paymentMethods = await get("get-all-account-select", false);
+    setPaymentMethod(paymentMethods.data);
     setModalType("payment");
     setIsOpen(true);
   };
+
+  const handlePaymentOption = (e: any) => {
+    let paymentClone = { ...payment };
+    if (e.target.name === "payment") {
+      if (e.target.value) {
+        paymentClone[e.target.name] = parseInt(e.target.value);
+        if (paymentClone[e.target.name] > finalCalculation.total) {
+          Notiflix.Report.failure(
+            "Error!!!",
+            "Payment can't greater than total",
+            "Okay"
+          );
+          return;
+        }
+        paymentClone["due"] =
+          finalCalculation.total - paymentClone[e.target.name];
+      } else {
+        paymentClone[e.target.name] = 0;
+      }
+    } else {
+      paymentClone[e.target.name] = parseInt(e.target.value);
+    }
+
+    setPayment(paymentClone);
+  };
+
+  const gotoDashboard = () => {
+    navigate("/home");
+  };
+
+  const paymentComplete = async () => {
+    if (!payment.paymentMethod) {
+      Report.warning(
+        "Error!!!",
+        "Please choose a payment option",
+        "Okay"
+      );
+      return;
+    }
+    if (!payment.customer_id) {
+      Report.warning("Error!!!", "Please choose a customer", "Okay");
+      return;
+    }
+    const purchaseData = {
+      items: cart,
+      payment,
+      finalCalculation,
+    };
+    let response = await sell(purchaseData, "sell");
+    setStockedOutProduct(response.data.stockedOutProduct);
+    if(!response.data.error){
+
+    }
+  };
+
+  const StockedOutProduct = () => (
+    <div className="p-pos__stockedOutList">
+      {stockedOutProduct.length > 0 && <Header Tag="h3" text="These are low stock product" />}
+      <Container margin="4">
+        {stockedOutProduct.map((item: any, i: any) => (
+          <div className="p-pos__stockItem">
+            <Tag icon={<DollarOutlined />} color="magenta">
+              Product Name: {item.product_name}
+            </Tag>
+            <Tag icon={<DollarOutlined />} color="magenta">
+              Product Qty: {item.qty}
+            </Tag>
+          </div>
+        ))}
+      </Container>
+    </div>
+  );
 
   useEffect(() => {
     fetchSelectData();
@@ -456,40 +560,93 @@ const Pos = () => {
 
             {modalType === "payment" && (
               <>
-                <h1>Payment</h1>
+                <div className="p-pos__payment">
+                  <Input
+                    label="Account"
+                    value={payment.paymentMethod}
+                    onChange={(e) => {
+                      handlePaymentOption(e);
+                    }}
+                    name="paymentMethod"
+                    type="select"
+                    options={paymentMethod}
+                  />
+                  <Input
+                    label="Payment"
+                    value={payment.payment}
+                    onChange={(e) => {
+                      handlePaymentOption(e);
+                    }}
+                    name="payment"
+                    type="number"
+                  />
+                </div>
+                <div className="p-pos_info">
+                  <Container margin="12">
+                    <Tag icon={<DollarOutlined />} color="magenta">
+                      Total: {finalCalculation.total}
+                    </Tag>
+                    <Tag icon={<DollarOutlined />} color="magenta">
+                      Due: {payment.due}
+                    </Tag>
+                    <Tag icon={<DollarOutlined />} color="magenta">
+                      Previous Due: {payment.due}
+                    </Tag>
+                  </Container>
+                  <Container margin="12">
+                    <ButtonCustom
+                      type="primary"
+                      onClick={paymentComplete}
+                      label="Complete Payment"
+                      disabled={!cart.length}
+                    />
+                  </Container>
+                  <Container margin="12">{StockedOutProduct()}</Container>
+                </div>
               </>
             )}
           </ModalComponent>
+
           <Card style={{ height: "95vh", borderRadius: "8px" }}>
-            <Row gutter={[16, 16]}>
-              {product.map((item: any, i: any) => {
-                return (
-                  <Col className="gutter-row" span={8} key={i}>
-                    <div
-                      className="p-pos__productCard"
-                      onClick={() => {
-                        handleProductClick(item);
-                      }}
-                    >
-                      <ShoppingCartOutlined
-                        style={{ fontSize: "40px", color: "#08c" }}
-                      />
-                      <Container margin="8">
-                        <p className="p-pos__name">{item.product_name}</p>
-                      </Container>
-                      <Container margin="4">
-                        <p className="p-pos__price">{item.brand}</p>
-                      </Container>
-                      <Container margin="4">
-                        <p className="p-pos__price">
-                          {item.selling_price} Taka
-                        </p>
-                      </Container>
-                    </div>
-                  </Col>
-                );
-              })}
-            </Row>
+            <div className="p-pos__actionContainer">
+              <ButtonCustom
+                label="Dashboard"
+                onClick={gotoDashboard}
+                disabled={false}
+                type="primary"
+              />
+            </div>
+            <Container margin="12">
+              <Row gutter={[16, 16]}>
+                {product.map((item: any, i: any) => {
+                  return (
+                    <Col className="gutter-row" span={8} key={i}>
+                      <div
+                        className="p-pos__productCard"
+                        onClick={() => {
+                          handleProductClick(item);
+                        }}
+                      >
+                        <ShoppingCartOutlined
+                          style={{ fontSize: "40px", color: "#08c" }}
+                        />
+                        <Container margin="8">
+                          <p className="p-pos__name">{item.product_name}</p>
+                        </Container>
+                        <Container margin="4">
+                          <p className="p-pos__price">{item.brand}</p>
+                        </Container>
+                        <Container margin="4">
+                          <p className="p-pos__price">
+                            {item.selling_price} Taka
+                          </p>
+                        </Container>
+                      </div>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </Container>
           </Card>
         </div>
       </div>

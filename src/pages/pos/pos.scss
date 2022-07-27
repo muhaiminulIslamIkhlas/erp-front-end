@@ -78,11 +78,37 @@
             font-weight: bold;
             margin-right: 8px;
         }
+
+        input {
+            border-radius: 8px;
+            padding-left: 6px;
+        }
     }
 
-    &__customer{
+    &__customer {
         display: grid;
         grid-template-columns: 8fr 1fr;
         column-gap: 20px;
+    }
+
+    &__payment {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 8px;
+    }
+
+    &_info {
+        font-weight: bold;
+    }
+
+    &__stockItem {
+        display: flex;
+        column-gap: 20px;
+        padding: 5px;
+        border: 1px dashed;
+
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
     }
 }
