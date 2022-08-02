@@ -5,10 +5,8 @@ import {
   DeleteOutlined,
   DollarOutlined,
   MinusCircleOutlined,
-  MoneyCollectOutlined,
   PlusCircleOutlined,
   PlusOutlined,
-  SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import Container from "../../components/atom/container/container";
@@ -21,11 +19,19 @@ import Notiflix, { Report } from "notiflix";
 import Header from "../../components/atom/heading/header";
 import CustomerForm from "../../components/molecules/form/cutomer/customerform";
 import { useNavigate } from "react-router-dom";
+import jsPDFInvoiceTemplate, {
+  OutputType,
+  jsPDF,
+} from "jspdf-invoice-muhaimin";
+import Logo from "../../assets/images/erp.png";
 
 const Pos = () => {
   const date = new Date();
   const navigate = useNavigate();
   const [product, setProduct] = useState<any>([]);
+  const [filteredProduct, setFilteredProduct] = useState<any>([]);
+  const [serachName, setSerachName] = useState<any>("");
+  const [category, setCategory] = useState<any>([]);
   const [customer, setCustomer] = useState<any>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<any>("product");
@@ -33,6 +39,7 @@ const Pos = () => {
   const [stockedOutProduct, setStockedOutProduct] = useState<any>([]);
   const [payment, setPayment] = useState<any>({
     due: 0,
+    previousDue: 0,
     payment: 0,
     paymentMethod: 0,
     customer_id: "",
@@ -58,7 +65,10 @@ const Pos = () => {
 
   const fetchSelectData = async () => {
     let allProduct = await get("get-all-product-raw", false);
+    let allCategory = await get("get-all-category-select", false);
     setProduct(allProduct.data);
+    setFilteredProduct(allProduct.data);
+    setCategory(allCategory.data);
   };
 
   const calculateFinalData = (cart: any) => {
@@ -89,6 +99,12 @@ const Pos = () => {
   };
 
   const closeModal = () => {
+    if (modalType === "payment") {
+      let paymentClone = { ...payment };
+      paymentClone.due = 0;
+      paymentClone.payment = 0;
+      setPayment(paymentClone);
+    }
     setIsOpen(false);
   };
 
@@ -211,9 +227,11 @@ const Pos = () => {
     setCustomer(allCustomer.data);
   };
 
-  const handleCustomer = (e: any) => {
+  const handleCustomer = async (e: any) => {
+    let previousDue = await get("get-previous-due/" + e.target.value, true);
     let paymentClone = { ...payment };
     paymentClone.customer_id = e.target.value;
+    paymentClone.previousDue = previousDue.data;
     setPayment(paymentClone);
   };
 
@@ -228,21 +246,13 @@ const Pos = () => {
   };
 
   const handlePayment = async () => {
-    if(!cart.length){
-      Report.warning(
-        'Warning',
-        'Please add some product first',
-        'Okay',
-        );
-        return
+    if (!cart.length) {
+      Report.warning("Warning", "Please add some product first", "Okay");
+      return;
     }
-    if(!payment.customer_id){
-      Report.warning(
-        'Warning',
-        'Please select a customer',
-        'Okay',
-        );
-        return
+    if (!payment.customer_id) {
+      Report.warning("Warning", "Please select a customer", "Okay");
+      return;
     }
     let paymentMethods = await get("get-all-account-select", false);
     setPaymentMethod(paymentMethods.data);
@@ -279,13 +289,28 @@ const Pos = () => {
     navigate("/home");
   };
 
+  const setToDefault = () => {
+    setPayment({
+      due: 0,
+      previousDue: 0,
+      payment: 0,
+      paymentMethod: 0,
+      customer_id: "",
+    });
+    setCart([]);
+    setFinalCalculation({
+      date: date.toISOString().slice(0, 10),
+      items: 0,
+      subTotal: 0,
+      discount: 0,
+      otherCost: 0,
+      total: 0,
+    });
+  };
+
   const paymentComplete = async () => {
     if (!payment.paymentMethod) {
-      Report.warning(
-        "Error!!!",
-        "Please choose a payment option",
-        "Okay"
-      );
+      Report.warning("Error!!!", "Please choose a payment option", "Okay");
       return;
     }
     if (!payment.customer_id) {
@@ -299,14 +324,154 @@ const Pos = () => {
     };
     let response = await sell(purchaseData, "sell");
     setStockedOutProduct(response.data.stockedOutProduct);
-    if(!response.data.error){
-
+    if (!response.data.error) {
+      var props = {
+        outputType: OutputType.DataUrlNewWindow,
+        returnJsPDFDocObject: true,
+        fileName: "Invoice 2021",
+        orientationLandscape: false,
+        compress: true,
+        logo: {
+          src: Logo,
+          type: "PNG",
+          width: 43.33,
+          height: 26.66,
+          margin: {
+            top: 0,
+            left: 0,
+          },
+        },
+        business: {
+          name: "Business Name",
+          address: "Albania, Tirane ish-Dogana, Durres 2001",
+          phone: "(+355) 069 11 11 111",
+          email: "email@example.com",
+          email_1: "info@example.al",
+          website: "www.example.al",
+        },
+        contact: {
+          //From server
+          label: "Invoice issued for:",
+          name: response.data.customer.customer_name,
+          address: response.data.customer.customer_address,
+          phone: response.data.customer.customer_phone,
+        },
+        invoice: {
+          label: "Invoice #: ", //From Server
+          num: response.data.invoice_no, //From Server
+          invDate: "Date: " + finalCalculation.date,
+          headerBorder: false,
+          tableBodyBorder: false,
+          header: [
+            {
+              title: "#",
+              style: {
+                width: 10,
+              },
+            },
+            {
+              title: "Company",
+              style: {
+                width: 25,
+              },
+            },
+            {
+              title: "Item Name",
+              style: {
+                width: 55,
+              },
+            },
+            { title: "Size" },
+            { title: "Color" },
+            { title: "Qty" },
+            { title: "Unit" },
+            {
+              title: "Rate",
+              style: {
+                width: 20,
+              },
+            },
+            { title: "Less" },
+            { title: "Amount" },
+          ],
+          table: cart.map((item: any, index: any) => {
+            return [
+              index + 1,
+              response.data.cart_item[item.product_id].brand_id,
+              item.product_name,
+              response.data.cart_item[item.product_id].size
+                ? response.data.cart_item[item.product_id].size
+                : "-",
+              response.data.cart_item[item.product_id].color
+                ? response.data.cart_item[item.product_id].color
+                : "-",
+              item.qty,
+              response.data.cart_item[item.product_id].unit_id,
+              item.price,
+              item.discount,
+              item.total,
+            ];
+          }),
+          additionalRows: [
+            {
+              col1: "Total Amount:",
+              col2: finalCalculation.total.toString(),
+            },
+            {
+              col1: "Sub Total:",
+              col2: finalCalculation.subTotal.toString(),
+            },
+            {
+              col1: "Discount:",
+              col2: finalCalculation.discount.toString(),
+            },
+            {
+              col1: "Other Cost:",
+              col2: finalCalculation.otherCost.toString(),
+            },
+            {
+              col1: "Previous Due:",
+              col2: payment.previousDue.toString(),
+            },
+            {
+              col1: "Total Payable Amount:",
+              col2: (
+                parseInt(payment.previousDue) + parseInt(finalCalculation.total)
+              ).toString(),
+            },
+            {
+              col1: "Paid Amount:",
+              col2: payment.payment.toString(),
+            },
+            {
+              col1: "Net Dues:",
+              col2: (
+                parseInt(payment.previousDue) +
+                parseInt(finalCalculation.total) -
+                parseInt(payment.payment)
+              ).toString(),
+            },
+          ],
+          invDescLabel: "Signature",
+          invDesc: "Invoice is not valid without signature",
+        },
+        footer: {
+          text: "The invoice is created on a computer and is not valid without the signature and stamp.",
+        },
+        pageEnable: true,
+        pageLabel: "Page ",
+      };
+      setToDefault();
+      closeModal();
+      const pdfObject: any = jsPDFInvoiceTemplate(props);
     }
   };
 
   const StockedOutProduct = () => (
     <div className="p-pos__stockedOutList">
-      {stockedOutProduct.length > 0 && <Header Tag="h3" text="These are low stock product" />}
+      {stockedOutProduct.length > 0 && (
+        <Header Tag="h3" text="These are low stock product" />
+      )}
       <Container margin="4">
         {stockedOutProduct.map((item: any, i: any) => (
           <div className="p-pos__stockItem">
@@ -322,10 +487,42 @@ const Pos = () => {
     </div>
   );
 
+  const handleFilterProduct = (categoryName: any) => {
+    let filteredData;
+    setSerachName("");
+    if (!categoryName) {
+      filteredData = product;
+    } else {
+      filteredData = product.filter((item: any) => {
+        if (item.category == categoryName) {
+          return true;
+        }
+      });
+    }
+    setFilteredProduct(filteredData);
+  };
+
+  const handleProductSearch = (e: any) => {
+    const value = e.target.value;
+    setSerachName(value);
+    if (value.length == 0 || value.length == undefined) {
+      console.log("Null value");
+      setFilteredProduct(product);
+    } else {
+      const matchNameProduct = product.filter((item: any) => {
+        let query = value.toLowerCase();
+        console.log(item.product_name.toLowerCase().includes(query));
+        return item.product_name.toLowerCase().includes(query);
+      });
+      console.log(matchNameProduct);
+      setFilteredProduct(matchNameProduct);
+    }
+  };
+
   useEffect(() => {
     fetchSelectData();
     getAllCustomer();
-  }, ["product"]);
+  }, ["product", "category"]);
 
   return (
     <PosTemplate>
@@ -363,7 +560,7 @@ const Pos = () => {
                 <div className="p-pos__element">Price</div>
                 <div className="p-pos__element">Discount</div>
                 <div className="p-pos__element">Total</div>
-                <div className="p-pos__element">Remove</div>
+                <div className="p-pos__remove">Remove</div>
               </div>
             </Container>
             {cart.map((item: any, i: any) => {
@@ -401,7 +598,7 @@ const Pos = () => {
                     />
                   </div>
                   <div className="p-pos__element">{item.total}</div>
-                  <div className="p-pos__element">
+                  <div className="p-pos__remove">
                     <DeleteOutlined
                       style={{ color: "red", cursor: "pointer" }}
                       onClick={() => {
@@ -590,7 +787,7 @@ const Pos = () => {
                       Due: {payment.due}
                     </Tag>
                     <Tag icon={<DollarOutlined />} color="magenta">
-                      Previous Due: {payment.due}
+                      Previous Due: {payment.previousDue}
                     </Tag>
                   </Container>
                   <Container margin="12">
@@ -615,36 +812,77 @@ const Pos = () => {
                 disabled={false}
                 type="primary"
               />
+              <Input
+                label={false}
+                name="search_product"
+                onChange={handleProductSearch}
+                type="text"
+                value={serachName}
+                placeHolder="Search Product"
+              />
             </div>
             <Container margin="12">
-              <Row gutter={[16, 16]}>
-                {product.map((item: any, i: any) => {
-                  return (
-                    <Col className="gutter-row" span={8} key={i}>
-                      <div
-                        className="p-pos__productCard"
-                        onClick={() => {
-                          handleProductClick(item);
-                        }}
-                      >
-                        <ShoppingCartOutlined
-                          style={{ fontSize: "40px", color: "#08c" }}
-                        />
-                        <Container margin="8">
-                          <p className="p-pos__name">{item.product_name}</p>
-                        </Container>
-                        <Container margin="4">
-                          <p className="p-pos__price">{item.brand}</p>
-                        </Container>
-                        <Container margin="4">
-                          <p className="p-pos__price">
-                            {item.selling_price} Taka
-                          </p>
-                        </Container>
-                      </div>
-                    </Col>
-                  );
-                })}
+              <Row>
+                <Col span={4}>
+                  <div className="p-pos__productFilter">
+                    <Button
+                      type="dashed"
+                      style={{ marginBottom: "15px" }}
+                      block
+                      onClick={() => {
+                        handleFilterProduct(0);
+                      }}
+                    >
+                      All Product
+                    </Button>
+                    {category.map((item: any, i: any) => {
+                      return (
+                        <Button
+                          key={i}
+                          type="dashed"
+                          style={{ marginBottom: "15px" }}
+                          block
+                          onClick={() => {
+                            handleFilterProduct(item.label);
+                          }}
+                        >
+                          {item.label}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </Col>
+                <Col span={20}>
+                  <Row gutter={[16, 16]}>
+                    {filteredProduct.map((item: any, i: any) => {
+                      return (
+                        <Col className="gutter-row" span={8} key={i}>
+                          <div
+                            className="p-pos__productCard"
+                            onClick={() => {
+                              handleProductClick(item);
+                            }}
+                          >
+                            <ShoppingCartOutlined
+                              style={{ fontSize: "40px", color: "#08c" }}
+                            />
+                            <Container margin="8">
+                              <p className="p-pos__name">{item.product_name}</p>
+                            </Container>
+                            <Container margin="4">
+                              <p className="p-pos__price">{item.brand}</p>
+                            </Container>
+                            <Container margin="4">
+                              <p className="p-pos__price">
+                                {item.selling_price} Taka
+                              </p>
+                            </Container>
+                          </div>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                </Col>
               </Row>
             </Container>
           </Card>

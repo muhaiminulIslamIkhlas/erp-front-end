@@ -36,11 +36,10 @@ export async function sell(formData: any, url: string) {
     Loading.pulse();
     let { data } = await http.post(apiEndpoint + url, formData);
     Loading.remove();
-    if (data.error) {
+    if (data.data.error) {
     } else {
       Notify.success(data.data.message);
     }
-
     return data;
   } catch (error: any) {
     console.log(error);

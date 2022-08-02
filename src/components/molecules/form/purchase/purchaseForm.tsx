@@ -123,7 +123,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ isSuuccess, back }) => {
   const handleUnitQtyChange = (e: any) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
-    
+
     if (name === "unitPrice") {
       setUnitPrice(value);
     } else if (name === "qty") {
@@ -372,76 +372,84 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({ isSuuccess, back }) => {
           </>
         </Container>
         <Container margin="24">
-          <Col className="gutter-row" span={6}>
-            <Container margin="8">
-              <Input
-                label="Discount (Flat/Percent)"
-                value={data.discount}
-                onChange={handleChange}
-                name="discount"
-                type="number"
-                error={errors.discount}
-              />
-            </Container>
-            <Container margin="8">
-              <Input
-                label="Other cost"
-                value={data.other_cost}
-                onChange={handleChange}
-                name="other_cost"
-                type="number"
-                error={errors.other_cost}
-                options={supplier}
-              />
-            </Container>
-            <Container margin="8">
-              <Input
-                label="Total"
-                value={total}
-                onChange={handleChange}
-                name="total"
-                type="number"
-                error={errors.total}
-                isdisbled
-              />
-            </Container>
-            <Container margin="8">
-              <Input
-                label="Grand Total"
-                value={GrandTotal}
-                onChange={handleChange}
-                name="grand_total"
-                type="number"
-                isdisbled
-                error={errors.grand_total}
-              />
-            </Container>
-            <Container margin="8">
-              <Input
-                label="Payment"
-                value={data.payment}
-                onChange={handleChange}
-                name="payment"
-                type="number"
-                error={errors.payment}
-              />
-            </Container>
-            <Container margin="8">
-              <Input
-                label="Due"
-                value={GrandTotal - data.payment}
-                onChange={handleChange}
-                name="due"
-                type="number"
-                error={errors.due}
-              />
-            </Container>
-          </Col>
+          <Row>
+            <Col className="gutter-row" span={12}></Col>
+            <Col className="gutter-row" span={6}>
+              <Container margin="8">
+                <Input
+                  label="Discount (Flat/Percent)"
+                  value={data.discount}
+                  onChange={handleChange}
+                  name="discount"
+                  type="number"
+                  error={errors.discount}
+                />
+              </Container>
+              <Container margin="8">
+                <Input
+                  label="Other cost"
+                  value={data.other_cost}
+                  onChange={handleChange}
+                  name="other_cost"
+                  type="number"
+                  error={errors.other_cost}
+                  options={supplier}
+                />
+              </Container>
+              <Container margin="8">
+                <Input
+                  label="Total"
+                  value={total}
+                  onChange={handleChange}
+                  name="total"
+                  type="number"
+                  error={errors.total}
+                  isdisbled
+                />
+              </Container>
+              <Container margin="8">
+                <Input
+                  label="Grand Total"
+                  value={GrandTotal}
+                  onChange={handleChange}
+                  name="grand_total"
+                  type="number"
+                  isdisbled
+                  error={errors.grand_total}
+                />
+              </Container>
+              <Container margin="8">
+                <Input
+                  label="Payment"
+                  value={data.payment}
+                  onChange={handleChange}
+                  name="payment"
+                  type="number"
+                  error={errors.payment}
+                />
+              </Container>
+              <Container margin="8">
+                <Input
+                  label="Due"
+                  value={GrandTotal - data.payment}
+                  onChange={handleChange}
+                  name="due"
+                  type="number"
+                  error={errors.due}
+                />
+              </Container>
+            </Col>
+          </Row>
         </Container>
         <Container margin="24">
-          <div className="o-form__button">
-            <ButtonCustom label="Purchase" disabled={false} />
-          </div>
+          <Row>
+            <Col span={12}></Col>
+            <Col span={6}>
+              <div className="o-form__button">
+                <ButtonCustom label="Purchase" disabled={false} />
+              </div>
+            </Col>
+          </Row>
         </Container>
       </form>
     </div>
