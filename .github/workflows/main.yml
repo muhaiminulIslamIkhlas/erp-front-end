@@ -24,7 +24,7 @@ jobs:
         host: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.DIGITAL_OCEAN_SECRET }}
+        KEY: ${{ secrets.SSH_KEY }}
         script: mkdir /home/hello
     # - uses: actions/checkout@v1
     # - name: Copy file via scp
