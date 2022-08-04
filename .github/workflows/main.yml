@@ -22,7 +22,7 @@ jobs:
     - uses: digitalocean/action-doctl@v2
       with:
         token: ${{secrets.DIGITAL_OCEAN_SECRET}}
-    - run: cd /home/client
+    - run: cd /home/client/
     - run: git pull
     - run: pm2 stop all
     - run: pm2 serve build 3000
