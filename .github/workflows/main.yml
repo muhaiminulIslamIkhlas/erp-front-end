@@ -18,17 +18,25 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Copy file via scp
-      uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.HOST }}
+    - name: Executing remote  command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.DIGITAL_OCEAN_SECRET }}
-      with:
-        source: "build"
-        target: "/opt/app"
+        script: mkdir /home/hello
+    # - uses: actions/checkout@v1
+    # - name: Copy file via scp
+    #   uses: appleboy/scp-action@master
+    #   env:
+    #     HOST: ${{ secrets.HOST }}
+    #     USERNAME: ${{ secrets.USERNAME }}
+    #     PORT: ${{ secrets.PORT }}
+    #     KEY: ${{ secrets.DIGITAL_OCEAN_SECRET }}
+    #   with:
+    #     source: "build"
+    #     target: "/opt/app"
     # - uses: actions/checkout@v2
     # - uses: digitalocean/action-doctl@v2
     #   with:
