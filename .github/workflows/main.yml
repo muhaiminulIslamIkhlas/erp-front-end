@@ -1,0 +1,27 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+    - run: npm run build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{secrets.DIGITAL_OCEAN_SECRET}}
+    - run: cd /home/client
+    - run: git pull
+    - run: pm2 stop all
+    - run: pm2 serve build 3000
