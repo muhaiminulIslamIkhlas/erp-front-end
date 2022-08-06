@@ -24,7 +24,7 @@ jobs:
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
     - name: Save DigitalOcean kubeconfig
       run: doctl compute ssh ubuntu-s-1vcpu-1gb-blr1-01
-    - run: mkdir /home/hello
+    - run: mkdir /home/helloo
     # - name: Executing remote  command
     #   uses: appleboy/ssh-action@master
     #   with:
