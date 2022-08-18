@@ -1,17 +1,16 @@
-@import "../../styles/index.scss";
+@import "../../../styles/index.scss";
 
 .sidebar {
-    border-radius: 1rem;
+    border-radius: 12px;
     box-shadow: 0 1.6rem 3rem rgb(0, 0, 0, 0.1);
     margin: 10px;
     overflow: hidden;
-    // height: calc(100vh - 25px);
-    height: 100vh;
+    height: calc(100vh - 25px);
     background-color: #05050b;
     border-right: 0 solid #05050b;
-    bottom: 0;
     color: #fff;
     flex-shrink: 0;
+    position: fixed;
 
     &__content {
         text-decoration: none;
@@ -26,6 +25,7 @@
 
     &--active {
         width: 195px;
+        
     }
 
     &__item {

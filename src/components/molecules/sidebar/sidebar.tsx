@@ -10,21 +10,21 @@ import { Navigate, NavLink } from "react-router-dom";
 
 interface SidebarProps {
   children?: React.ReactNode;
+  sideBarActive: boolean;
+  handleSidebarIconClick: () => void
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const handleSidebarIconClick = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+const Sidebar: React.FC<SidebarProps> = ({ children,handleSidebarIconClick,sideBarActive }) => {
+  
+
   return (
     <div
       className={`sidebar ${
-        sidebarOpen ? "sidebar--active" : "sidebar--close"
+        sideBarActive ? "sidebar--active" : "sidebar--close"
       }`}
     >
       <div className="sidebar__logoWrapper">
-        {sidebarOpen && (
+        {sideBarActive && (
           <span className="sidebar__logo">
             <svg
               width="80.74941451990632"

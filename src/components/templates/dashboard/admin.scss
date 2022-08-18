@@ -1,6 +1,19 @@
 @import "../../../styles/index.scss";
 .dashboard {
     &__wrapper {
-        display: flex;
+        // display: flex;
+    }
+
+    &__sidebar {
+    }
+
+    &__mainBody {
+        width: calc(100% - 220px);
+        margin-left: 220px;
+    }
+
+    &--wide{
+        width: calc(100% - 100px);
+        margin-left: 100px;
     }
 }
