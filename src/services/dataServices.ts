@@ -10,19 +10,10 @@ export async function store(formData: any, url: string) {
     Loading.pulse();
     let { data } = await http.post(apiEndpoint + url, formData);
     Loading.remove();
-    console.log(data);
-    Notify.success(data.data.message);
+    Notify.success(data.message);
     return success;
   } catch (error: any) {
-    console.log(error);
-    let status = error.response.status;
-    if (status === 422) {
-      Notiflix.Report.failure("Error!!!", "Invalid Input", "Okay");
-    }
-    let message =
-      status > 399 && status < 415
-        ? "Invalid Username or Password"
-        : "Something went wrong, please try again";
+    const message = error.response.data.message;
     Notiflix.Report.failure("Error!!!", message, "Okay");
     Loading.remove();
     return fail;
@@ -85,7 +76,7 @@ export async function deleteData(url: string, id: any) {
     Loading.pulse();
     let { data } = await http.get(apiEndpoint + url + "/" + id);
     Loading.remove();
-    Notify.success(data.data.message);
+    Notify.success(data.message);
   } catch (error) {
     console.log(error);
     let message = "Something went wrong, please try again";

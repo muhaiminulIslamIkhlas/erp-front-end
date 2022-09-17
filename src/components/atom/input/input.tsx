@@ -12,7 +12,9 @@ interface InputProps {
   placeHolder?: string;
   options?: { label: string; value: string | number; selected?: boolean }[];
   isLogin?: boolean;
-  isdisbled? : boolean
+  isdisbled?: boolean;
+  defaultSelect?: boolean;
+  selectedId?: string | number;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -26,6 +28,8 @@ const Input: React.FC<InputProps> = ({
   options,
   isLogin,
   isdisbled,
+  defaultSelect,
+  selectedId,
   ...inputProps
 }) => {
   return (
@@ -38,9 +42,14 @@ const Input: React.FC<InputProps> = ({
       <Container margin="8">
         {type === "select" && (
           <select name={name} className="a-input" onChange={onChange}>
-            <option value="">Select an option</option>
+            <option value="" selected={defaultSelect}>
+              Select an option
+            </option>
             {options?.map((item) => (
-              <option value={item.value} selected={item.selected}>
+              <option
+                value={item.value}
+                selected={selectedId === item.value ? true : false}
+              >
                 {item.label}
               </option>
             ))}

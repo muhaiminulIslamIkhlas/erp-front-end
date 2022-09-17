@@ -31,7 +31,19 @@
     }
 
     &--primary {
-        background: linear-gradient(to right, #2193b0 0%, #6dd5ed 100%);
-        color: azure;
+        font-size: 16px;
+        font-weight: $font-bold;
+        color: $color-secondary05;
+        background: $color-button-gradation;
+        background-size: 200% auto;
+        transition: all $micro-animation-duration ease-out;
+        width: 240px;
+        padding: 12px;
+        border-radius: 26px;
+        box-shadow: 0 12px 24px $color-shadow-button;
+
+        &:hover {
+            background-position: 100% 0;
+        }
     }
 }

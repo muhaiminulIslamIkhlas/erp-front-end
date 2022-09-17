@@ -11,12 +11,14 @@ import { Navigate, NavLink } from "react-router-dom";
 interface SidebarProps {
   children?: React.ReactNode;
   sideBarActive: boolean;
-  handleSidebarIconClick: () => void
+  handleSidebarIconClick: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ children,handleSidebarIconClick,sideBarActive }) => {
-  
-
+const Sidebar: React.FC<SidebarProps> = ({
+  children,
+  handleSidebarIconClick,
+  sideBarActive,
+}) => {
   return (
     <div
       className={`sidebar ${
@@ -126,6 +128,36 @@ const Sidebar: React.FC<SidebarProps> = ({ children,handleSidebarIconClick,sideB
                 <FaHospitalUser />
               </span>
               <span className="sidebar__text">Account</span>
+            </span>
+          </div>
+        </NavLink>
+        <NavLink to="/account/add-money">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaHospitalUser />
+              </span>
+              <span className="sidebar__text">Add Account</span>
+            </span>
+          </div>
+        </NavLink>
+        <NavLink to="/account/widthdraw-money">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaHospitalUser />
+              </span>
+              <span className="sidebar__text">Widthdraw Account</span>
+            </span>
+          </div>
+        </NavLink>
+        <NavLink to="/account/history">
+          <div className="sidebar__item">
+            <span className="sidebar__itemWrapper">
+              <span className="sidebar__icon">
+                <FaHospitalUser />
+              </span>
+              <span className="sidebar__text">Account History</span>
             </span>
           </div>
         </NavLink>

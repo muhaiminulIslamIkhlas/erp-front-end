@@ -1,0 +1,16 @@
+@import "../../../styles/index.scss";
+
+.a-badge {
+    width: fit-content;
+    padding: 1px 12px 2px;
+    font-size: 12px;
+    font-weight: $font-medium;
+    color: $color-text-white;
+    border-radius: 4px;
+    background-color: $color-primary01;
+
+    &--large{
+        font-size: 18px;
+        padding: 3px 16px 6px;
+    }
+}

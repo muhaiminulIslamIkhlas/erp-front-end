@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import ProductForm from "../../../../components/molecules/form/product/productForm";
+import ProductFormEdit from "../../../../components/molecules/form/product/productFormEdit";
 import Admin from "../../../../components/templates/dashboard/admin";
 
-const Create: React.FC = () => {
+const Edit: React.FC = () => {
   const navigate = useNavigate();
 
   const handleAfterSubmit = () => {
@@ -13,10 +13,10 @@ const Create: React.FC = () => {
   return (
     <Admin>
       <div>
-        <ProductForm isSuuccess={handleAfterSubmit} />
+        <ProductFormEdit isSuuccess={handleAfterSubmit} />
       </div>
     </Admin>
   );
 };
 
-export default Create;
+export default Edit;

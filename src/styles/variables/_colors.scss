@@ -6,3 +6,187 @@ $sidebar-bg-primary: #F7F8FC;
 
 $icon-color: #809FB8;
 $text-color: #131635;
+
+//
+
+/**
+ * Layouts
+ */
+ $width-pc: 1366px; // design width(pc).
+ $width-max-pc: 1600px; // max width(pc)
+ $width-mid-pc: 1280px; // design switching width(pc)
+ $width-min-pc: 1024px; // If narrower, a side scroll bar will appear(pc).
+ $width-breakpoint: 959px; // If narrower, change to sp display.
+ 
+ /**
+   * margin
+   */
+ $margin-6: 6px;
+ $margin-8: 8px;
+ $margin-12: 12px;
+ $margin-16: 16px;
+ $margin-20: 20px;
+ $margin-24: 24px;
+ $margin-32: 32px;
+ $margin-40: 40px;
+ $margin-48: 48px;
+ $margin-56: 56px;
+ $margin-64: 64px;
+ $margin-72: 72px;
+ $margin-80: 80px;
+ $margin-88: 88px;
+ $margin-112: 112px;
+ 
+ /**
+   * padding
+   */
+ $padding-8: 8px;
+ $padding-16: 16px;
+ $padding-24: 24px;
+ $padding-32: 32px;
+ $padding-40: 40px;
+ $padding-48: 48px;
+ $padding-56: 56px;
+ $padding-64: 64px;
+ $padding-72: 72px;
+ $padding-80: 80px;
+ 
+ /**
+   * Z indices
+   */
+ $z-index-layer-bg: -1;
+ $z-index-layer0: 0;
+ $z-index-layer1: 1;
+ $z-index-layer2: 2;
+ $z-index-layer3: 3;
+ $z-index-navi: 99;
+ $z-index-modal: 100;
+ 
+ /**
+  * Font
+  */
+ $fontset-normal: 'Inter', 'Zen Kaku Gothic New', sans-serif; // for Japanese text
+ $fontset-english: 'Inter', sans-serif; // for english
+ $font-regular: 400;
+ $font-medium: 500;
+ $font-bold: 700;
+ 
+ /**
+  * Line height
+  */
+ $line-height-0: 0;
+ $line-height-1: 1;
+ $line-height-1_2: 1.2;
+ $line-height-1_4: 1.4;
+ $line-height-1_5: 1.5;
+ $line-height-1_6: 1.6;
+ $line-height-1_7: 1.7;
+ $line-height-1_8: 1.8;
+ $line-height-2_7: 2.7;
+ 
+ /**
+  * Colors
+  */
+ 
+ $color-primary01: #0e367d;
+ $color-primary02: #3178c4;
+ $color-primary03: #2893cb;
+ $color-primary04: #c3defe;
+ $color-primary05: #d2e4fd;
+ $color-primary06: #eaf1f9;
+ $color-primary07: #e6eaf2;
+ $color-primary08: #fd3e3e;
+ 
+ $color-secondary01: #434343;
+ $color-secondary02: #888888;
+ $color-secondary03: #b5b5b5;
+ $color-secondary04: #f5f5f5;
+ $color-secondary05: #ffffff;
+ $color-secondary06: #e5e5e5;
+ $color-secondary07: #d9d9d9;
+ 
+ // TEXT COLOR
+ $color-text-main: $color-secondary01;
+ $color-text-gray: #959595;
+ $color-text-gray-dark: #707070;
+ $color-text-black: #1e2a41;
+ $color-text-blue: $color-primary01;
+ $color-text-white: $color-secondary05;
+ $color-text-enable: $color-secondary03;
+ $color-text-value: #d94c4c;
+ 
+ // BUTTON COLOR
+ $color-button-light: $color-primary02;
+ $color-button-dark: #204db1;
+ $color-sns-button-light: #6a6a6a;
+ $color-sns-button-dark: #1f1f1f;
+ $color-button-gradation: linear-gradient(
+   90deg,
+   $color-button-light,
+   $color-button-dark,
+   $color-button-light
+ ); // background-color for button
+ $color-use-button-gradation: linear-gradient(
+   90deg,
+   $color-button-light,
+   $color-button-dark
+ ); // background-color for button
+ $color-stop-button-gradation: linear-gradient(to right, #cdcdcd 0%, #eaeaea 100%);
+ $color-sns-button-gradation: linear-gradient(
+   90deg,
+   $color-sns-button-light,
+   $color-sns-button-dark,
+   $color-sns-button-light
+ );
+ $color-disabled-button: $color-secondary03;
+ $color-toggle-button-gray: #e6e5e5;
+ 
+ // background-color for sns login button
+ // BACKGROUND COLOR
+ $color-bg-login: linear-gradient(#deecfb, #f5f7fa);
+ $color-bg-input: $color-secondary04;
+ $color-bg-toast: #22b3c1;
+ $color-bg-frame: $color-secondary05;
+ $color-bg-valueBox: #fafafa;
+ $color-bg-table1: #f4f6fa;
+ $color-bg-table2: #edf3fb;
+ $color-bg-dataRange: rgb(230 230 230 / 56%);
+ $color-bg-dashboard: #f7f9fa;
+ $color-bg-tab: #edf5ff;
+ $color-bg-hamburgerMenu-button1: $color-primary02;
+ $color-bg-hamburgerMenu-button2: $color-primary01;
+ $color-bg-hamburgerMenu-button3: #0e367d;
+ $color-bg-hamburgerMenu-modal: rgba(#000000, 0.15);
+ // BORDER COLOR
+ $color-border-value: #e9eff7;
+ $color-border-login: #d0d0d0;
+ $color-border-fee: #c3defe;
+ // SHADOW COLOR
+ $color-shadow-login: rgba(#004eff, 0.1);
+ $color-shadow-dashboard: rgba(#3875ff, 0.1);
+ $color-shadow-pulldown: rgba(#414141, 0.16);
+ $color-shadow-toggle: rgba(#5d5d5d, 0.16);
+ $color-shadow-button: rgba(#0c4fe8, 0.16);
+ $color-shadow-button-sns: rgba($color-secondary01, 0.16);
+ $color-shadow-button-thin: rgba(#336bea, 0.16);
+ $color-shadow-tooltip: rgba(#313131, 0.1);
+ //BORDER COLOR
+ $color-border-login: #d0d0d0;
+ $color-border-hamburgerMenu: #f2f2f2;
+ // STATUS COLOR
+ $color-error: #fd3e3e;
+ $color-status-use: #e9f0f5;
+ $color-status-stop: $color-secondary04;
+ $color-over-limit: #d94c4c;
+ $color-within-limit: $color-primary02;
+ //COLOR SCROLLBAR
+ $color-scrollbar: #eaeaea;
+ // ANIMATION
+ $micro-animation-duration: 0.3s;
+ $slide-animation-duration: 0.5s;
+ $fade-animation-duration: 0.5s;
+ $page-animation-delay: 0.6s;
+ $start-animation-delay: 0.8s;
+ // ICON
+ $color-icon-delete-hover: $color-secondary01;
+ $color-icon-delete-hover-dark: #000000;

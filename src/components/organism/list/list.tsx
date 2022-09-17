@@ -14,6 +14,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import "./list.scss";
 import Input from "../../atom/input/input";
 import CustomerForm from "../../molecules/form/cutomer/customerform";
+import { Confirm } from "notiflix";
 
 interface DataType {
   key: string;
@@ -22,15 +23,17 @@ interface DataType {
 }
 
 interface UnitProps {
-  formObject: any;
+  formObject?: any;
   tableColumn: DataType[];
   listUrl: string;
   editUrl?: string;
-  deleteUrl: string;
-  buttontext: string;
-  modalTitle: string;
-  type: "unit" | "account" | "brand" | "category" | "supplier" | "customer";
+  deleteUrl?: string;
+  buttontext?: string;
+  modalTitle?: string;
+  type?: "unit" | "account" | "brand" | "category" | "supplier" | "customer";
   pageHeading: string;
+  onFormSubmit?: () => void;
+  noAction?: boolean;
 }
 
 const List: React.FC<UnitProps> = ({
@@ -42,6 +45,8 @@ const List: React.FC<UnitProps> = ({
   modalTitle,
   type,
   pageHeading,
+  onFormSubmit,
+  noAction,
 }) => {
   const [data, setData] = useState<any>([]);
   const [total, setTotal] = useState<any>(0);
@@ -50,7 +55,7 @@ const List: React.FC<UnitProps> = ({
   const [formData, setFormData] = useState<any>(formObject);
   const [buttonText, setButtonText] = useState<string>("Create");
   const [searchValue, setSearchValue] = useState<string>("");
-
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const fetchData = async (page?: number, pageSize = 10) => {
     let fetchedData: any;
     if (page) {
@@ -66,14 +71,17 @@ const List: React.FC<UnitProps> = ({
   };
 
   const handleDelete = async (record: any) => {
-    await deleteData(deleteUrl, record.id);
-    fetchData();
+    if (deleteUrl) {
+      await deleteData(deleteUrl, record.id);
+      fetchData();
+    }
   };
 
   const handleEdit = async (record: any) => {
     setFormData(record);
     setButtonText("Update");
     setIsOpen(true);
+    setIsEdit(true);
   };
 
   const handleCreateNew = () => {
@@ -84,11 +92,15 @@ const List: React.FC<UnitProps> = ({
 
   const closeModal = () => {
     setIsOpen(false);
+    setIsEdit(false);
   };
 
   const submitSuccess = () => {
     closeModal();
     fetchData();
+    if (onFormSubmit) {
+      onFormSubmit();
+    }
   };
 
   const handleSearch = (e: any) => {
@@ -100,77 +112,90 @@ const List: React.FC<UnitProps> = ({
     fetchData();
   }, ["data"]);
 
-  const columns: ColumnsType<DataType> = [
-    ...tableColumn,
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <EditOutlined
-            onClick={() => {
-              handleEdit(record);
-            }}
-          />
-          <DeleteOutlined
-            onClick={async () => {
-              await handleDelete(record);
-            }}
-          />
-        </Space>
-      ),
-    },
-  ];
+  const columns: ColumnsType<DataType> = noAction
+    ? [...tableColumn]
+    : [
+        ...tableColumn,
+        {
+          title: "Action",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle">
+              <EditOutlined
+                onClick={() => {
+                  handleEdit(record);
+                }}
+              />
+              <DeleteOutlined
+                onClick={() => {
+                  Confirm.show(
+                    "Are You Sure ?",
+                    "Do you really want to delete this ?",
+                    "Yes",
+                    "No",
+                    async () => {
+                      await handleDelete(record);
+                    }
+                  );
+                }}
+              />
+            </Space>
+          ),
+        },
+      ];
   return (
     <div className="o-list">
-      <ModalComponent
-        isOpen={isOpen}
-        closeModal={closeModal}
-        title={modalTitle}
-      >
-        {type === "unit" && (
-          <UnitForm
-            isSuuccess={submitSuccess}
-            formData={formData}
-            buttonText={buttonText}
-          />
-        )}
-        {type === "account" && (
-          <AccountForm
-            isSuuccess={submitSuccess}
-            formData={formData}
-            buttonText={buttonText}
-          />
-        )}
-        {type === "brand" && (
-          <BrandForm
-            isSuuccess={submitSuccess}
-            formData={formData}
-            buttonText={buttonText}
-          />
-        )}
-        {type === "category" && (
-          <CategoryForm
-            isSuuccess={submitSuccess}
-            formData={formData}
-            buttonText={buttonText}
-          />
-        )}
-        {type === "supplier" && (
-          <SupplierForm
-            isSuuccess={submitSuccess}
-            formData={formData}
-            buttonText={buttonText}
-          />
-        )}
-        {type === "customer" && (
-          <CustomerForm
-            isSuuccess={submitSuccess}
-            formData={formData}
-            buttonText={buttonText}
-          />
-        )}
-      </ModalComponent>
+      {modalTitle && (
+        <ModalComponent
+          isOpen={isOpen}
+          closeModal={closeModal}
+          title={modalTitle}
+        >
+          {type === "unit" && (
+            <UnitForm
+              isSuuccess={submitSuccess}
+              formData={formData}
+              buttonText={buttonText}
+            />
+          )}
+          {type === "account" && (
+            <AccountForm
+              isSuuccess={submitSuccess}
+              formData={formData}
+              buttonText={buttonText}
+              isEdit={isEdit}
+            />
+          )}
+          {type === "brand" && (
+            <BrandForm
+              isSuuccess={submitSuccess}
+              formData={formData}
+              buttonText={buttonText}
+            />
+          )}
+          {type === "category" && (
+            <CategoryForm
+              isSuuccess={submitSuccess}
+              formData={formData}
+              buttonText={buttonText}
+            />
+          )}
+          {type === "supplier" && (
+            <SupplierForm
+              isSuuccess={submitSuccess}
+              formData={formData}
+              buttonText={buttonText}
+            />
+          )}
+          {type === "customer" && (
+            <CustomerForm
+              isSuuccess={submitSuccess}
+              formData={formData}
+              buttonText={buttonText}
+            />
+          )}
+        </ModalComponent>
+      )}
       <div className="o-list__heading">
         <h2>{pageHeading}</h2>
       </div>
@@ -184,11 +209,13 @@ const List: React.FC<UnitProps> = ({
             onChange={handleSearch}
             value={searchValue}
           />
-          <Button
-            label={buttontext}
-            onClick={handleCreateNew}
-            disabled={false}
-          ></Button>
+          {buttontext && (
+            <Button
+              label={buttontext}
+              onClick={handleCreateNew}
+              disabled={false}
+            ></Button>
+          )}
         </div>
       </Container>
       <Container margin="12">

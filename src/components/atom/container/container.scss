@@ -24,4 +24,10 @@
     &--24 {
         margin-top: 24px;
     }
+
+    &--center{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }

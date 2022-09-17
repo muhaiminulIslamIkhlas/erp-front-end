@@ -61,7 +61,7 @@
     &__element {
         width: 16%;
         &--product {
-            width: 30%;
+            width: 25%;
         }
     }
 
@@ -118,7 +118,7 @@
 
     &__actionContainer{
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 2fr;
         column-gap: 20px;
 
     }

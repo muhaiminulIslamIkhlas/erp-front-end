@@ -20,12 +20,9 @@ export async function login(username: string, password: string) {
       Authorization: `Bearer ${data.access_token}`,
     };
   } catch (error: any) {
-    let status = error.response.status;
-    let message =
-      status > 399 && status < 415
-        ? "Invalid Username or Password"
-        : "Something went wrong, please try again";
-    Notiflix.Report.failure("Error!!!", message, "Okay");
+    console.log(error)
+    let statusText = error.response.data.message;
+    Notiflix.Report.failure("Error!!!", statusText, "Okay");
   }
 }
 

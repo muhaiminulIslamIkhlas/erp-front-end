@@ -51,7 +51,6 @@ const List: React.FC<ListProps> = () => {
   //   };
 
   const details = (record: any) => {
-    console.log(record)
     navigate("/product/item/purchase/details/" + record.id);
   };
 

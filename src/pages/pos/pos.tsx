@@ -24,6 +24,7 @@ import jsPDFInvoiceTemplate, {
   jsPDF,
 } from "jspdf-invoice-muhaimin";
 import Logo from "../../assets/images/erp.png";
+import Badge from "../../components/atom/badge/badge";
 
 const Pos = () => {
   const date = new Date();
@@ -34,6 +35,7 @@ const Pos = () => {
   const [category, setCategory] = useState<any>([]);
   const [customer, setCustomer] = useState<any>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [resetCustomer, setResetCustomer] = useState<boolean>(false);
   const [modalType, setModalType] = useState<any>("product");
   const [paymentMethod, setPaymentMethod] = useState<any>([]);
   const [stockedOutProduct, setStockedOutProduct] = useState<any>([]);
@@ -101,7 +103,7 @@ const Pos = () => {
   const closeModal = () => {
     if (modalType === "payment") {
       let paymentClone = { ...payment };
-      paymentClone.due = 0;
+      paymentClone.due = finalCalculation.total;
       paymentClone.payment = 0;
       setPayment(paymentClone);
     }
@@ -228,11 +230,19 @@ const Pos = () => {
   };
 
   const handleCustomer = async (e: any) => {
-    let previousDue = await get("get-previous-due/" + e.target.value, true);
-    let paymentClone = { ...payment };
-    paymentClone.customer_id = e.target.value;
-    paymentClone.previousDue = previousDue.data;
-    setPayment(paymentClone);
+    setResetCustomer(false);
+    if (e.target.value) {
+      let previousDue = await get("get-previous-due/" + e.target.value, true);
+      let paymentClone = { ...payment };
+      paymentClone.customer_id = e.target.value;
+      paymentClone.previousDue = previousDue.data;
+      setPayment(paymentClone);
+    } else {
+      let paymentClone = { ...payment };
+      paymentClone.customer_id = e.target.value;
+      paymentClone.previousDue = 0;
+      setPayment(paymentClone);
+    }
   };
 
   const customerAddButton = () => {
@@ -256,6 +266,9 @@ const Pos = () => {
     }
     let paymentMethods = await get("get-all-account-select", false);
     setPaymentMethod(paymentMethods.data);
+    let paymentClone = { ...payment };
+    paymentClone.due = finalCalculation.total;
+    setPayment(paymentClone);
     setModalType("payment");
     setIsOpen(true);
   };
@@ -290,13 +303,13 @@ const Pos = () => {
   };
 
   const setToDefault = () => {
-    setPayment({
-      due: 0,
-      previousDue: 0,
-      payment: 0,
-      paymentMethod: 0,
-      customer_id: "",
-    });
+    let paymentClone = { ...payment };
+    paymentClone.due = 0;
+    paymentClone.previousDue = 0;
+    paymentClone.payment = 0;
+    paymentClone.paymentMethod = 0;
+    paymentClone.customer_id = "";
+    setPayment(paymentClone);
     setCart([]);
     setFinalCalculation({
       date: date.toISOString().slice(0, 10),
@@ -306,6 +319,7 @@ const Pos = () => {
       otherCost: 0,
       total: 0,
     });
+    setResetCustomer(true);
   };
 
   const paymentComplete = async () => {
@@ -397,7 +411,7 @@ const Pos = () => {
           table: cart.map((item: any, index: any) => {
             return [
               index + 1,
-              response.data.cart_item[item.product_id].brand_id,
+              response.data.cart_item[item.product_id].brand,
               item.product_name,
               response.data.cart_item[item.product_id].size
                 ? response.data.cart_item[item.product_id].size
@@ -406,7 +420,7 @@ const Pos = () => {
                 ? response.data.cart_item[item.product_id].color
                 : "-",
               item.qty,
-              response.data.cart_item[item.product_id].unit_id,
+              response.data.cart_item[item.product_id].unit,
               item.price,
               item.discount,
               item.total,
@@ -461,8 +475,9 @@ const Pos = () => {
         pageEnable: true,
         pageLabel: "Page ",
       };
-      setToDefault();
+
       closeModal();
+      setToDefault();
       const pdfObject: any = jsPDFInvoiceTemplate(props);
     }
   };
@@ -506,15 +521,12 @@ const Pos = () => {
     const value = e.target.value;
     setSerachName(value);
     if (value.length == 0 || value.length == undefined) {
-      console.log("Null value");
       setFilteredProduct(product);
     } else {
       const matchNameProduct = product.filter((item: any) => {
         let query = value.toLowerCase();
-        console.log(item.product_name.toLowerCase().includes(query));
         return item.product_name.toLowerCase().includes(query);
       });
-      console.log(matchNameProduct);
       setFilteredProduct(matchNameProduct);
     }
   };
@@ -541,6 +553,7 @@ const Pos = () => {
                   name=""
                   type="select"
                   options={customer}
+                  defaultSelect={resetCustomer}
                 />
                 <Button
                   style={{ alignSelf: "center" }}
@@ -560,7 +573,6 @@ const Pos = () => {
                 <div className="p-pos__element">Price</div>
                 <div className="p-pos__element">Discount</div>
                 <div className="p-pos__element">Total</div>
-                <div className="p-pos__remove">Remove</div>
               </div>
             </Container>
             {cart.map((item: any, i: any) => {
@@ -597,15 +609,17 @@ const Pos = () => {
                       value={item.discount}
                     />
                   </div>
-                  <div className="p-pos__element">{item.total}</div>
-                  <div className="p-pos__remove">
-                    <DeleteOutlined
-                      style={{ color: "red", cursor: "pointer" }}
+                  <div className="p-pos__element">{item.total}
+                  <DeleteOutlined
+                      style={{ color: "red", cursor: "pointer", marginLeft: "5px" }}
                       onClick={() => {
                         removeCart(i);
                       }}
                     />
                   </div>
+                  {/* <div className="p-pos__remove">
+                    
+                  </div> */}
                 </div>
               );
             })}
@@ -863,14 +877,21 @@ const Pos = () => {
                               handleProductClick(item);
                             }}
                           >
-                            <ShoppingCartOutlined
-                              style={{ fontSize: "40px", color: "#08c" }}
-                            />
                             <Container margin="8">
                               <p className="p-pos__name">{item.product_name}</p>
                             </Container>
                             <Container margin="4">
                               <p className="p-pos__price">{item.brand}</p>
+                            </Container>
+                            {}
+                            <Container margin="4">
+                              <p className="p-pos__size">
+                                <Badge label={item.size ? item.size : "none"} />
+                                &nbsp; | &nbsp;
+                                <Badge
+                                  label={item.color ? item.color : "none"}
+                                />
+                              </p>
                             </Container>
                             <Container margin="4">
                               <p className="p-pos__price">

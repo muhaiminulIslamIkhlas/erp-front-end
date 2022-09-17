@@ -46,9 +46,7 @@ const List: React.FC<ListProps> = () => {
   };
 
   const handleEdit = async (record: any) => {
-    // setFormData(record);
-    // setButtonText("Update");
-    // setIsOpen(true);
+    navigate("/product/item/edit/" + record.id);
   };
 
   const columns: ColumnsType<DataType> = [
@@ -82,11 +80,11 @@ const List: React.FC<ListProps> = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {/* <EditOutlined
+          <EditOutlined
             onClick={() => {
               handleEdit(record);
             }}
-          /> */}
+          />
           <DeleteOutlined
             onClick={async () => {
               await handleDelete(record);

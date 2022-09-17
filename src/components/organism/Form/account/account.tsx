@@ -11,12 +11,14 @@ interface AccountProps {
   isSuuccess: () => void;
   formData: any;
   buttonText: string;
+  isEdit?: boolean;
 }
 
 const Account: React.FC<AccountProps> = ({
   isSuuccess,
   formData,
   buttonText,
+  isEdit
 }) => {
   const [data, setData] = useState<any>(formData);
 
@@ -100,6 +102,7 @@ const Account: React.FC<AccountProps> = ({
               type="text"
               error={errors.current_balance}
               placeHolder="Initial amount"
+              isdisbled={isEdit}
             />
           </Container>
         </Container>

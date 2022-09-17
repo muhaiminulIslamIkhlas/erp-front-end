@@ -3,12 +3,17 @@ import "./container.scss";
 
 interface ContainerProps {
   children: React.ReactNode;
-  margin?: "4" | "8" | "12" | "16" | "20" | "24";
+  margin?: "0" | "4" | "8" | "12" | "16" | "20" | "24";
+  align?: "center" | "right" | "left";
 }
 
-const Container: React.FC<ContainerProps> = ({ children, margin }) => {
+const Container: React.FC<ContainerProps> = ({ children, margin, align }) => {
   return (
-    <div className={`a-container a-container--${margin && margin}`}>
+    <div
+      className={`a-container a-container--${
+        margin && margin
+      } a-container a-container--${align && align}`}
+    >
       {children}
     </div>
   );
